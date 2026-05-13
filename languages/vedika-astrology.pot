@@ -1,0 +1,478 @@
+# Copyright (C) 2026 Vedika Intelligence
+# This file is distributed under the same license as the Vedika Astrology plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Vedika Astrology 1.0.0\n"
+"Report-Msgid-Bugs-To: https://vedika.io/support\n"
+"POT-Creation-Date: 2026-05-13 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: vedika-astrology.php
+msgid "Please provide date/time and location."
+msgstr ""
+
+#: vedika-astrology.php
+msgid "Please provide both profiles."
+msgstr ""
+
+#: vedika-astrology.php
+msgid "Please provide name and birth date."
+msgstr ""
+
+#: vedika-astrology.php
+msgid "Settings"
+msgstr ""
+
+#: includes/class-vedika-api.php
+msgid "API key required for usage stats."
+msgstr ""
+
+#: includes/class-vedika-api.php
+msgid "Failed to parse API response."
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Invalid zodiac sign."
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Lucky Number:"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Lucky Color:"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Powered by Vedika AI"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Card of the Day"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Upright"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Reversed"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Element:"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Today's Panchang"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Day"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Tithi"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Nakshatra"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Yoga"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Karana"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Sunrise"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Sunset"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Birth Chart Calculator"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Date & Time of Birth"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Latitude"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Longitude"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Timezone Offset"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Generate Chart"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Compatibility Checker"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Person 1"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Person 2"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Name"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Check Compatibility"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Numerology Calculator"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Full Name"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Date of Birth"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Calculate"
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Unable to load content. Please try again later."
+msgstr ""
+
+#: includes/class-vedika-shortcodes.php
+msgid "Horoscope data is currently unavailable. Please try again later."
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Vedika Daily Horoscope"
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Display daily horoscope for a zodiac sign."
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Daily Horoscope"
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Title:"
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Zodiac Sign:"
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Vedika Tarot Card of the Day"
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Display the tarot card of the day."
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Tarot Card of the Day"
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Vedika Today's Panchang"
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Display today's panchang details."
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Today's Panchang"
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Latitude:"
+msgstr ""
+
+#: includes/class-vedika-widgets.php
+msgid "Longitude:"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Vedika API Settings"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Vedika API"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "API Configuration"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "API Key"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Default Language"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Display Settings"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Cache Duration"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Theme"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Invalid API key format. Keys start with vk_live_ or vk_ent_."
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Could not validate API key: %s"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "API key validation failed. Please check that your key is active."
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "API key validated successfully."
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Connected to Vedika API (production endpoints)."
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "No API key configured. The plugin will use free sandbox endpoints with sample data."
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Get an API key"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Current key: %s"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Enter your Vedika API key. Leave blank to use sandbox (free, sample data)."
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Default language for API responses. Individual shortcodes can override this."
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "15 minutes"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "30 minutes"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "1 hour"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "2 hours"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "6 hours"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "12 hours"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "24 hours"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "How long to cache API responses. Longer durations reduce API calls and improve performance."
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Light"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Dark"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Choose the visual theme for Vedika widgets and shortcodes."
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Quick Reference"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Shortcode"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Description"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Parameters"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Daily horoscope for a sign"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "All 12 signs with tabs"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Tarot card of the day"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Today's panchang"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Birth chart form and display"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Compatibility checker"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Numerology calculator"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "None"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "None (interactive form)"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Gutenberg Blocks"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Search for \"Vedika\" in the block editor to find the Horoscope and Tarot blocks."
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Widgets"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Add Vedika widgets from %s. Available: Daily Horoscope, Tarot Card of the Day, Panchang."
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Appearance > Widgets"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "API Usage"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Total Queries"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "This Month"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Wallet Balance"
+msgstr ""
+
+#: includes/class-vedika-admin.php
+msgid "Plan"
+msgstr ""
+
+#: blocks/horoscope/edit.js
+msgid "Horoscope Settings"
+msgstr ""
+
+#: blocks/horoscope/edit.js
+msgid "Zodiac Sign"
+msgstr ""
+
+#: blocks/horoscope/edit.js
+msgid "Period"
+msgstr ""
+
+#: blocks/horoscope/edit.js
+msgid "Daily"
+msgstr ""
+
+#: blocks/horoscope/edit.js
+msgid "Weekly"
+msgstr ""
+
+#: blocks/horoscope/edit.js
+msgid "Monthly"
+msgstr ""
+
+#: blocks/horoscope/edit.js
+msgid "Horoscope content will appear here on the frontend."
+msgstr ""
+
+#: blocks/tarot/edit.js
+msgid "Major Arcana"
+msgstr ""
+
+#: blocks/tarot/edit.js
+msgid "Tarot reading will appear here on the frontend."
+msgstr ""
+
+#: blocks/tarot/edit.js
+msgid "New Beginnings"
+msgstr ""
+
+#: blocks/tarot/edit.js
+msgid "Innocence"
+msgstr ""
+
+#: blocks/tarot/edit.js
+msgid "Spontaneity"
+msgstr ""

@@ -1,0 +1,19 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "vedika/tarot",
+    "version": "1.0.0",
+    "title": "Vedika Tarot Card of the Day",
+    "category": "widgets",
+    "icon": "visibility",
+    "description": "Display the tarot card of the day. Powered by Vedika AI.",
+    "keywords": [ "tarot", "card", "divination", "vedika" ],
+    "supports": {
+        "html": false,
+        "align": [ "wide", "full" ]
+    },
+    "attributes": {},
+    "textdomain": "vedika-astrology",
+    "editorScript": "file:./edit.js",
+    "render": "file:./render.php"
+}

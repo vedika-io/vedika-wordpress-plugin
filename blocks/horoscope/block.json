@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "vedika/horoscope",
+    "version": "1.0.0",
+    "title": "Vedika Daily Horoscope",
+    "category": "widgets",
+    "icon": "star-filled",
+    "description": "Display daily, weekly, or monthly horoscope for a zodiac sign. Powered by Vedika AI.",
+    "keywords": [ "astrology", "horoscope", "zodiac", "vedika" ],
+    "supports": {
+        "html": false,
+        "align": [ "wide", "full" ]
+    },
+    "attributes": {
+        "sign": {
+            "type": "string",
+            "default": "aries"
+        },
+        "period": {
+            "type": "string",
+            "default": "daily"
+        },
+        "lang": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "textdomain": "vedika-astrology",
+    "editorScript": "file:./edit.js",
+    "render": "file:./render.php"
+}
