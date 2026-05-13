@@ -123,9 +123,26 @@ class Vedika_Shortcodes {
             'period' => 'daily',
         ), $atts, 'vedika_horoscope_all' );
 
+        $lang   = $atts['lang'] ?: get_option( 'vedika_default_language', 'en' );
+        $period = $atts['period'];
+
+        // Check if ALL 12 signs are cached — if so, render everything server-side.
+        $all_cached = true;
+        foreach ( self::$signs as $sign ) {
+            $cache_key = "vedika_horoscope_{$sign}_{$period}_{$lang}";
+            if ( false === get_transient( $cache_key ) ) {
+                $all_cached = false;
+                break;
+            }
+        }
+
+        $uid = wp_unique_id( 'vedika-horoscope-all-' );
+
         ob_start();
         ?>
-        <div class="vedika-horoscope-all">
+        <div class="vedika-horoscope-all" id="<?php echo esc_attr( $uid ); ?>"
+             data-lang="<?php echo esc_attr( $lang ); ?>"
+             data-period="<?php echo esc_attr( $period ); ?>">
             <div class="vedika-tabs" role="tablist">
                 <?php foreach ( self::$signs as $index => $sign ) :
                     $meta   = self::$sign_meta[ $sign ];
@@ -141,19 +158,45 @@ class Vedika_Shortcodes {
                 <?php endforeach; ?>
             </div>
             <div class="vedika-tab-panels">
-                <?php foreach ( self::$signs as $index => $sign ) :
-                    $hidden = ( 0 !== $index ) ? ' vedika-hidden' : '';
-                ?>
-                    <div class="vedika-tab-panel<?php echo $hidden; ?>"
-                         role="tabpanel"
-                         data-sign="<?php echo esc_attr( $sign ); ?>">
-                        <?php echo $this->horoscope( array(
-                            'sign'   => $sign,
-                            'lang'   => $atts['lang'],
-                            'period' => $atts['period'],
-                        ) ); ?>
-                    </div>
-                <?php endforeach; ?>
+                <?php if ( $all_cached ) : ?>
+                    <?php // All cached — render all 12 server-side. ?>
+                    <?php foreach ( self::$signs as $index => $sign ) :
+                        $hidden = ( 0 !== $index ) ? ' vedika-hidden' : '';
+                    ?>
+                        <div class="vedika-tab-panel<?php echo $hidden; ?>"
+                             role="tabpanel"
+                             data-sign="<?php echo esc_attr( $sign ); ?>"
+                             data-loaded="true">
+                            <?php echo $this->horoscope( array(
+                                'sign'   => $sign,
+                                'lang'   => $atts['lang'],
+                                'period' => $period,
+                            ) ); ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <?php // Cold cache — only fetch the first sign; lazy-load the rest via AJAX. ?>
+                    <?php foreach ( self::$signs as $index => $sign ) :
+                        $hidden = ( 0 !== $index ) ? ' vedika-hidden' : '';
+                    ?>
+                        <div class="vedika-tab-panel<?php echo $hidden; ?>"
+                             role="tabpanel"
+                             data-sign="<?php echo esc_attr( $sign ); ?>"
+                             data-loaded="<?php echo ( 0 === $index ) ? 'true' : 'false'; ?>">
+                            <?php if ( 0 === $index ) : ?>
+                                <?php echo $this->horoscope( array(
+                                    'sign'   => $sign,
+                                    'lang'   => $atts['lang'],
+                                    'period' => $period,
+                                ) ); ?>
+                            <?php else : ?>
+                                <div class="vedika-loading">
+                                    <p><?php esc_html_e( 'Loading...', 'vedika-astrology' ); ?></p>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
         <?php
@@ -288,30 +331,32 @@ class Vedika_Shortcodes {
     // -------------------------------------------------------------------------
 
     public function birth_chart( $atts ) {
+        $uid = wp_unique_id( 'vedika-bc-' );
+
         ob_start();
         ?>
-        <div class="vedika-birth-chart vedika-card">
+        <div class="vedika-birth-chart vedika-card" data-vedika-instance="<?php echo esc_attr( $uid ); ?>">
             <div class="vedika-form-header">
                 <h3><?php esc_html_e( 'Birth Chart Calculator', 'vedika-astrology' ); ?></h3>
             </div>
-            <form class="vedika-form" id="vedika-birth-chart-form">
+            <form class="vedika-form vedika-birth-chart-form" id="<?php echo esc_attr( $uid ); ?>-form">
                 <div class="vedika-form-group">
-                    <label for="vedika-bc-datetime"><?php esc_html_e( 'Date & Time of Birth', 'vedika-astrology' ); ?></label>
-                    <input type="datetime-local" id="vedika-bc-datetime" name="datetime" required />
+                    <label for="<?php echo esc_attr( $uid ); ?>-datetime"><?php esc_html_e( 'Date & Time of Birth', 'vedika-astrology' ); ?></label>
+                    <input type="datetime-local" id="<?php echo esc_attr( $uid ); ?>-datetime" name="datetime" required />
                 </div>
                 <div class="vedika-form-row">
                     <div class="vedika-form-group vedika-half">
-                        <label for="vedika-bc-lat"><?php esc_html_e( 'Latitude', 'vedika-astrology' ); ?></label>
-                        <input type="number" id="vedika-bc-lat" name="lat" step="0.0001" placeholder="28.6139" required />
+                        <label for="<?php echo esc_attr( $uid ); ?>-lat"><?php esc_html_e( 'Latitude', 'vedika-astrology' ); ?></label>
+                        <input type="number" id="<?php echo esc_attr( $uid ); ?>-lat" name="lat" step="0.0001" placeholder="28.6139" required />
                     </div>
                     <div class="vedika-form-group vedika-half">
-                        <label for="vedika-bc-lng"><?php esc_html_e( 'Longitude', 'vedika-astrology' ); ?></label>
-                        <input type="number" id="vedika-bc-lng" name="lng" step="0.0001" placeholder="77.209" required />
+                        <label for="<?php echo esc_attr( $uid ); ?>-lng"><?php esc_html_e( 'Longitude', 'vedika-astrology' ); ?></label>
+                        <input type="number" id="<?php echo esc_attr( $uid ); ?>-lng" name="lng" step="0.0001" placeholder="77.209" required />
                     </div>
                 </div>
                 <div class="vedika-form-group">
-                    <label for="vedika-bc-tz"><?php esc_html_e( 'Timezone Offset', 'vedika-astrology' ); ?></label>
-                    <select id="vedika-bc-tz" name="tz">
+                    <label for="<?php echo esc_attr( $uid ); ?>-tz"><?php esc_html_e( 'Timezone Offset', 'vedika-astrology' ); ?></label>
+                    <select id="<?php echo esc_attr( $uid ); ?>-tz" name="tz">
                         <option value="-12">UTC-12:00</option>
                         <option value="-11">UTC-11:00</option>
                         <option value="-10">UTC-10:00</option>
@@ -347,7 +392,7 @@ class Vedika_Shortcodes {
                 </div>
                 <button type="submit" class="vedika-btn"><?php esc_html_e( 'Generate Chart', 'vedika-astrology' ); ?></button>
             </form>
-            <div class="vedika-result" id="vedika-birth-chart-result" style="display:none;"></div>
+            <div class="vedika-result" id="<?php echo esc_attr( $uid ); ?>-result" style="display:none;"></div>
             <div class="vedika-attribution">
                 <?php esc_html_e( 'Powered by Vedika AI', 'vedika-astrology' ); ?>
             </div>
@@ -361,58 +406,60 @@ class Vedika_Shortcodes {
     // -------------------------------------------------------------------------
 
     public function compatibility( $atts ) {
+        $uid = wp_unique_id( 'vedika-compat-' );
+
         ob_start();
         ?>
-        <div class="vedika-compatibility vedika-card">
+        <div class="vedika-compatibility vedika-card" data-vedika-instance="<?php echo esc_attr( $uid ); ?>">
             <div class="vedika-form-header">
                 <h3><?php esc_html_e( 'Compatibility Checker', 'vedika-astrology' ); ?></h3>
             </div>
-            <form class="vedika-form" id="vedika-compatibility-form">
+            <form class="vedika-form vedika-compatibility-form" id="<?php echo esc_attr( $uid ); ?>-form">
                 <fieldset class="vedika-fieldset">
                     <legend><?php esc_html_e( 'Person 1', 'vedika-astrology' ); ?></legend>
                     <div class="vedika-form-group">
-                        <label for="vedika-c-name1"><?php esc_html_e( 'Name', 'vedika-astrology' ); ?></label>
-                        <input type="text" id="vedika-c-name1" name="name1" required />
+                        <label for="<?php echo esc_attr( $uid ); ?>-name1"><?php esc_html_e( 'Name', 'vedika-astrology' ); ?></label>
+                        <input type="text" id="<?php echo esc_attr( $uid ); ?>-name1" name="name1" required />
                     </div>
                     <div class="vedika-form-group">
-                        <label for="vedika-c-dt1"><?php esc_html_e( 'Date & Time of Birth', 'vedika-astrology' ); ?></label>
-                        <input type="datetime-local" id="vedika-c-dt1" name="datetime1" required />
+                        <label for="<?php echo esc_attr( $uid ); ?>-dt1"><?php esc_html_e( 'Date & Time of Birth', 'vedika-astrology' ); ?></label>
+                        <input type="datetime-local" id="<?php echo esc_attr( $uid ); ?>-dt1" name="datetime1" required />
                     </div>
                     <div class="vedika-form-row">
                         <div class="vedika-form-group vedika-half">
-                            <label for="vedika-c-lat1"><?php esc_html_e( 'Latitude', 'vedika-astrology' ); ?></label>
-                            <input type="number" id="vedika-c-lat1" name="lat1" step="0.0001" required />
+                            <label for="<?php echo esc_attr( $uid ); ?>-lat1"><?php esc_html_e( 'Latitude', 'vedika-astrology' ); ?></label>
+                            <input type="number" id="<?php echo esc_attr( $uid ); ?>-lat1" name="lat1" step="0.0001" required />
                         </div>
                         <div class="vedika-form-group vedika-half">
-                            <label for="vedika-c-lng1"><?php esc_html_e( 'Longitude', 'vedika-astrology' ); ?></label>
-                            <input type="number" id="vedika-c-lng1" name="lng1" step="0.0001" required />
+                            <label for="<?php echo esc_attr( $uid ); ?>-lng1"><?php esc_html_e( 'Longitude', 'vedika-astrology' ); ?></label>
+                            <input type="number" id="<?php echo esc_attr( $uid ); ?>-lng1" name="lng1" step="0.0001" required />
                         </div>
                     </div>
                 </fieldset>
                 <fieldset class="vedika-fieldset">
                     <legend><?php esc_html_e( 'Person 2', 'vedika-astrology' ); ?></legend>
                     <div class="vedika-form-group">
-                        <label for="vedika-c-name2"><?php esc_html_e( 'Name', 'vedika-astrology' ); ?></label>
-                        <input type="text" id="vedika-c-name2" name="name2" required />
+                        <label for="<?php echo esc_attr( $uid ); ?>-name2"><?php esc_html_e( 'Name', 'vedika-astrology' ); ?></label>
+                        <input type="text" id="<?php echo esc_attr( $uid ); ?>-name2" name="name2" required />
                     </div>
                     <div class="vedika-form-group">
-                        <label for="vedika-c-dt2"><?php esc_html_e( 'Date & Time of Birth', 'vedika-astrology' ); ?></label>
-                        <input type="datetime-local" id="vedika-c-dt2" name="datetime2" required />
+                        <label for="<?php echo esc_attr( $uid ); ?>-dt2"><?php esc_html_e( 'Date & Time of Birth', 'vedika-astrology' ); ?></label>
+                        <input type="datetime-local" id="<?php echo esc_attr( $uid ); ?>-dt2" name="datetime2" required />
                     </div>
                     <div class="vedika-form-row">
                         <div class="vedika-form-group vedika-half">
-                            <label for="vedika-c-lat2"><?php esc_html_e( 'Latitude', 'vedika-astrology' ); ?></label>
-                            <input type="number" id="vedika-c-lat2" name="lat2" step="0.0001" required />
+                            <label for="<?php echo esc_attr( $uid ); ?>-lat2"><?php esc_html_e( 'Latitude', 'vedika-astrology' ); ?></label>
+                            <input type="number" id="<?php echo esc_attr( $uid ); ?>-lat2" name="lat2" step="0.0001" required />
                         </div>
                         <div class="vedika-form-group vedika-half">
-                            <label for="vedika-c-lng2"><?php esc_html_e( 'Longitude', 'vedika-astrology' ); ?></label>
-                            <input type="number" id="vedika-c-lng2" name="lng2" step="0.0001" required />
+                            <label for="<?php echo esc_attr( $uid ); ?>-lng2"><?php esc_html_e( 'Longitude', 'vedika-astrology' ); ?></label>
+                            <input type="number" id="<?php echo esc_attr( $uid ); ?>-lng2" name="lng2" step="0.0001" required />
                         </div>
                     </div>
                 </fieldset>
                 <button type="submit" class="vedika-btn"><?php esc_html_e( 'Check Compatibility', 'vedika-astrology' ); ?></button>
             </form>
-            <div class="vedika-result" id="vedika-compatibility-result" style="display:none;"></div>
+            <div class="vedika-result" id="<?php echo esc_attr( $uid ); ?>-result" style="display:none;"></div>
             <div class="vedika-attribution">
                 <?php esc_html_e( 'Powered by Vedika AI', 'vedika-astrology' ); ?>
             </div>
@@ -426,24 +473,26 @@ class Vedika_Shortcodes {
     // -------------------------------------------------------------------------
 
     public function numerology( $atts ) {
+        $uid = wp_unique_id( 'vedika-num-' );
+
         ob_start();
         ?>
-        <div class="vedika-numerology vedika-card">
+        <div class="vedika-numerology vedika-card" data-vedika-instance="<?php echo esc_attr( $uid ); ?>">
             <div class="vedika-form-header">
                 <h3><?php esc_html_e( 'Numerology Calculator', 'vedika-astrology' ); ?></h3>
             </div>
-            <form class="vedika-form" id="vedika-numerology-form">
+            <form class="vedika-form vedika-numerology-form" id="<?php echo esc_attr( $uid ); ?>-form">
                 <div class="vedika-form-group">
-                    <label for="vedika-n-name"><?php esc_html_e( 'Full Name', 'vedika-astrology' ); ?></label>
-                    <input type="text" id="vedika-n-name" name="name" required />
+                    <label for="<?php echo esc_attr( $uid ); ?>-name"><?php esc_html_e( 'Full Name', 'vedika-astrology' ); ?></label>
+                    <input type="text" id="<?php echo esc_attr( $uid ); ?>-name" name="name" required />
                 </div>
                 <div class="vedika-form-group">
-                    <label for="vedika-n-dob"><?php esc_html_e( 'Date of Birth', 'vedika-astrology' ); ?></label>
-                    <input type="date" id="vedika-n-dob" name="birthdate" required />
+                    <label for="<?php echo esc_attr( $uid ); ?>-dob"><?php esc_html_e( 'Date of Birth', 'vedika-astrology' ); ?></label>
+                    <input type="date" id="<?php echo esc_attr( $uid ); ?>-dob" name="birthdate" required />
                 </div>
                 <button type="submit" class="vedika-btn"><?php esc_html_e( 'Calculate', 'vedika-astrology' ); ?></button>
             </form>
-            <div class="vedika-result" id="vedika-numerology-result" style="display:none;"></div>
+            <div class="vedika-result" id="<?php echo esc_attr( $uid ); ?>-result" style="display:none;"></div>
             <div class="vedika-attribution">
                 <?php esc_html_e( 'Powered by Vedika AI', 'vedika-astrology' ); ?>
             </div>

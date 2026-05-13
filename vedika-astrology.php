@@ -188,28 +188,54 @@ function vedika_astrology_deactivate() {
 register_deactivation_hook( __FILE__, 'vedika_astrology_deactivate' );
 
 /**
+ * Rate-limit check for AJAX handlers.
+ * Returns true if the request should be rejected (over limit).
+ *
+ * @return bool
+ */
+function vedika_ajax_rate_limited() {
+    $ip            = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0' );
+    $transient_key = 'vedika_ajax_limit_' . md5( $ip );
+    $count         = (int) get_transient( $transient_key );
+
+    if ( $count >= 10 ) {
+        return true;
+    }
+
+    set_transient( $transient_key, $count + 1, MINUTE_IN_SECONDS );
+    return false;
+}
+
+/**
  * AJAX handlers for frontend forms.
  */
 add_action( 'wp_ajax_vedika_birth_chart', 'vedika_ajax_birth_chart' );
 add_action( 'wp_ajax_nopriv_vedika_birth_chart', 'vedika_ajax_birth_chart' );
 
 function vedika_ajax_birth_chart() {
+    if ( vedika_ajax_rate_limited() ) {
+        wp_send_json_error( array( 'message' => __( 'Too many requests. Please wait a moment and try again.', 'vedika-astrology' ) ), 429 );
+    }
+
     check_ajax_referer( 'vedika_astrology_nonce', 'nonce' );
 
     $datetime = sanitize_text_field( $_POST['datetime'] ?? '' );
-    $lat      = floatval( $_POST['lat'] ?? 0 );
-    $lng      = floatval( $_POST['lng'] ?? 0 );
+    $lat      = isset( $_POST['lat'] ) ? $_POST['lat'] : null;
+    $lng      = isset( $_POST['lng'] ) ? $_POST['lng'] : null;
     $tz       = floatval( $_POST['tz'] ?? 5.5 );
 
-    if ( empty( $datetime ) || 0 === $lat ) {
+    if ( empty( $datetime ) || $lat === '' || $lat === null || $lng === '' || $lng === null ) {
         wp_send_json_error( array( 'message' => __( 'Please provide date/time and location.', 'vedika-astrology' ) ) );
     }
+
+    $lat = floatval( $lat );
+    $lng = floatval( $lng );
 
     $api    = Vedika_API::instance();
     $result = $api->get_birth_chart( $datetime, $lat, $lng, $tz );
 
     if ( is_wp_error( $result ) ) {
-        wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+        wp_send_json_error( array( 'message' => __( 'Unable to process request. Please try again.', 'vedika-astrology' ) ) );
     }
 
     wp_send_json_success( $result );
@@ -219,6 +245,10 @@ add_action( 'wp_ajax_vedika_compatibility', 'vedika_ajax_compatibility' );
 add_action( 'wp_ajax_nopriv_vedika_compatibility', 'vedika_ajax_compatibility' );
 
 function vedika_ajax_compatibility() {
+    if ( vedika_ajax_rate_limited() ) {
+        wp_send_json_error( array( 'message' => __( 'Too many requests. Please wait a moment and try again.', 'vedika-astrology' ) ), 429 );
+    }
+
     check_ajax_referer( 'vedika_astrology_nonce', 'nonce' );
 
     $data1 = array(
@@ -243,7 +273,7 @@ function vedika_ajax_compatibility() {
     $result = $api->get_compatibility( $data1, $data2 );
 
     if ( is_wp_error( $result ) ) {
-        wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+        wp_send_json_error( array( 'message' => __( 'Unable to process request. Please try again.', 'vedika-astrology' ) ) );
     }
 
     wp_send_json_success( $result );
@@ -253,6 +283,10 @@ add_action( 'wp_ajax_vedika_numerology', 'vedika_ajax_numerology' );
 add_action( 'wp_ajax_nopriv_vedika_numerology', 'vedika_ajax_numerology' );
 
 function vedika_ajax_numerology() {
+    if ( vedika_ajax_rate_limited() ) {
+        wp_send_json_error( array( 'message' => __( 'Too many requests. Please wait a moment and try again.', 'vedika-astrology' ) ), 429 );
+    }
+
     check_ajax_referer( 'vedika_astrology_nonce', 'nonce' );
 
     $name      = sanitize_text_field( $_POST['name'] ?? '' );
@@ -266,7 +300,44 @@ function vedika_ajax_numerology() {
     $result = $api->get_numerology( $name, $birthdate );
 
     if ( is_wp_error( $result ) ) {
-        wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+        wp_send_json_error( array( 'message' => __( 'Unable to process request. Please try again.', 'vedika-astrology' ) ) );
+    }
+
+    wp_send_json_success( $result );
+}
+
+/**
+ * AJAX handler for lazy-loading individual horoscope signs.
+ */
+add_action( 'wp_ajax_vedika_horoscope_sign', 'vedika_ajax_horoscope_sign' );
+add_action( 'wp_ajax_nopriv_vedika_horoscope_sign', 'vedika_ajax_horoscope_sign' );
+
+function vedika_ajax_horoscope_sign() {
+    if ( vedika_ajax_rate_limited() ) {
+        wp_send_json_error( array( 'message' => __( 'Too many requests. Please wait a moment and try again.', 'vedika-astrology' ) ), 429 );
+    }
+
+    check_ajax_referer( 'vedika_astrology_nonce', 'nonce' );
+
+    $sign   = strtolower( sanitize_text_field( $_POST['sign'] ?? '' ) );
+    $lang   = sanitize_text_field( $_POST['lang'] ?? '' );
+    $period = sanitize_text_field( $_POST['period'] ?? 'daily' );
+
+    $valid_signs = array(
+        'aries', 'taurus', 'gemini', 'cancer',
+        'leo', 'virgo', 'libra', 'scorpio',
+        'sagittarius', 'capricorn', 'aquarius', 'pisces',
+    );
+
+    if ( ! in_array( $sign, $valid_signs, true ) ) {
+        wp_send_json_error( array( 'message' => __( 'Invalid zodiac sign.', 'vedika-astrology' ) ) );
+    }
+
+    $api    = Vedika_API::instance();
+    $result = $api->get_daily_horoscope( $sign, $lang, $period );
+
+    if ( is_wp_error( $result ) ) {
+        wp_send_json_error( array( 'message' => __( 'Unable to process request. Please try again.', 'vedika-astrology' ) ) );
     }
 
     wp_send_json_success( $result );

@@ -52,9 +52,20 @@ The plugin works out of the box using free sandbox endpoints with sample data. N
 
 = About Vedika AI =
 
-Vedika Intelligence provides the most comprehensive astrology API available, covering Vedic, Western, and KP astrology systems with 516+ endpoints. Built for accuracy with Swiss Ephemeris-grade calculations.
+Vedika Intelligence provides the most comprehensive astrology API available, covering Vedic, Western, and KP astrology systems with 516+ endpoints. Built for accuracy with Vedika Ephemeris-grade calculations.
 
 Learn more at [vedika.io](https://vedika.io).
+
+= Third-Party Service =
+
+This plugin connects to the Vedika API (https://api.vedika.io) to provide astrology calculations, horoscope predictions, and tarot readings. When using this plugin, the following data may be transmitted to Vedika's servers:
+
+* Birth date, time, and location coordinates (for chart calculations)
+* Names (for compatibility and FLAMES calculations)
+
+By using this plugin, you agree to Vedika's:
+* Terms of Service: https://vedika.io/terms
+* Privacy Policy: https://vedika.io/privacy
 
 == Installation ==
 

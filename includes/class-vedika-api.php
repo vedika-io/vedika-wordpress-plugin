@@ -139,7 +139,7 @@ class Vedika_API {
 
         $result = $this->get( $url );
         if ( ! is_wp_error( $result ) ) {
-            set_transient( $cache_key, $result, DAY_IN_SECONDS );
+            set_transient( $cache_key, $result, $this->cache_duration );
         }
         return $result;
     }
@@ -210,7 +210,8 @@ class Vedika_API {
         ) );
 
         if ( ! is_wp_error( $result ) ) {
-            set_transient( $cache_key, $result, DAY_IN_SECONDS );
+            // Personalized data: shorter cache (10 minutes).
+            set_transient( $cache_key, $result, 10 * MINUTE_IN_SECONDS );
         }
         return $result;
     }
@@ -241,7 +242,8 @@ class Vedika_API {
         ) );
 
         if ( ! is_wp_error( $result ) ) {
-            set_transient( $cache_key, $result, DAY_IN_SECONDS );
+            // Personalized data: shorter cache (10 minutes).
+            set_transient( $cache_key, $result, 10 * MINUTE_IN_SECONDS );
         }
         return $result;
     }
@@ -272,7 +274,7 @@ class Vedika_API {
         ) );
 
         if ( ! is_wp_error( $result ) ) {
-            set_transient( $cache_key, $result, DAY_IN_SECONDS );
+            set_transient( $cache_key, $result, $this->cache_duration );
         }
         return $result;
     }
@@ -367,8 +369,12 @@ class Vedika_API {
         $data = json_decode( $body, true );
 
         if ( $code >= 400 ) {
-            $message = isset( $data['error'] ) ? $data['error'] : "API returned HTTP {$code}";
-            return new WP_Error( 'vedika_api_error', $message, array( 'status' => $code ) );
+            // Never expose upstream error details to the frontend.
+            return new WP_Error(
+                'vedika_api_error',
+                __( 'Unable to process request. Please try again.', 'vedika-astrology' ),
+                array( 'status' => $code )
+            );
         }
 
         if ( null === $data ) {
