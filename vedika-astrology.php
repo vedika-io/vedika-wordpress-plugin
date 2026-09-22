@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Vedika Astrology
  * Plugin URI: https://vedika.io/wordpress-plugin
- * Description: Add astrology, tarot, numerology, and horoscope features to your WordPress site. Powered by the Vedika API with 516+ endpoints.
+ * Description: Add astrology, tarot, numerology, and horoscope features to your WordPress site. Powered by the Vedika API.
  * Version: 1.0.0
  * Author: Vedika Intelligence
  * Author URI: https://vedika.io

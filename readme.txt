@@ -9,7 +9,7 @@ Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Add astrology, tarot, numerology, horoscope, panchang, and birth chart features to your WordPress site. Powered by the Vedika AI API with 516+ endpoints.
+Add astrology, tarot, numerology, horoscope, panchang, and birth chart features to your WordPress site. Powered by the Vedika API.
 
 == Description ==
 
@@ -52,7 +52,7 @@ The plugin works out of the box using free sandbox endpoints with sample data. N
 
 = About Vedika AI =
 
-Vedika Intelligence provides the most comprehensive astrology API available, covering Vedic, Western, and KP astrology systems with 516+ endpoints. Built for accuracy with Vedika Ephemeris-grade calculations.
+Vedika provides an astrology intelligence API covering Vedic, Western, and KP astrology systems, backed by XALEN Ephemeris calculations.
 
 Learn more at [vedika.io](https://vedika.io).
 
